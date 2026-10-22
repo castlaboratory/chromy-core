@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>chromy — a amostragem sequencial de Chromy, em código aberto</title>
+<meta name="description" content="O método de Chromy de amostragem sequencial com reposição mínima de probabilidade — o procedimento do PROC SURVEYSELECT METHOD=PPS_SEQ — como um motor Rust sem dependências, com vínculos para R e Python, fixado a uma única implementação de referência.">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<meta property="og:title" content="chromy — a amostragem sequencial de Chromy, em código aberto">
+<meta property="og:description" content="Cada unidade a menos de um da sua expectativa, e o tamanho da amostra sempre exato. Um motor Rust, vinculado a R e Python, fixado a uma referência.">
+<link rel="alternate" hreflang="en" href="https://castlaboratory.github.io/chromy-core/en/index.html">
+<link rel="alternate" hreflang="pt" href="https://castlaboratory.github.io/chromy-core/pt/index.html">
+<link rel="alternate" hreflang="x-default" href="https://castlaboratory.github.io/chromy-core/en/index.html">
+<style>
+  /* O índigo do chromy: a cor do logo hexagonal e do site pkgdown. */
+  :root { --accent: #35508C; }
+  @media (prefers-color-scheme: dark) { :root { --accent: #8fa7dd; } }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- ======================= nav ======================= -->
+<header class="border-b border-(--rule) bg-(--bg)/80 backdrop-blur-sm sticky top-0 z-40">
+  <nav class="mx-auto flex max-w-6xl items-baseline gap-6 px-5 py-3.5">
+    <a href="#" class="font-display text-xl font-bold tracking-tight">chromy</a>
+    <span class="font-mono text-xs text-(--muted) hidden sm:inline">v0.1</span>
+    <span class="flex-1"></span>
+    <a class="font-mono text-sm text-(--muted) hover:text-(--accent) transition-colors" href="#metodo">método</a>
+    <a class="font-mono text-sm text-(--muted) hover:text-(--accent) transition-colors" href="#ferramentas">ferramentas</a>
+    <a class="font-mono text-sm text-(--muted) hover:text-(--accent) transition-colors hidden sm:inline" href="#linguagens">linguagens</a>
+    <a class="font-mono text-sm text-(--muted) hover:text-(--accent) transition-colors" href="#instalar">instalar</a>
+    <a class="font-mono text-sm text-(--muted) hover:text-(--accent) transition-colors hidden sm:inline" href="https://docs.rs/chromy-core">docs.rs</a>
+    <a class="font-mono text-sm text-(--muted) hover:text-(--accent) transition-colors" href="https://github.com/castlaboratory/chromy-core">github</a>
+    <span class="flex items-baseline gap-2 border-l border-(--rule) pl-4"><a class="font-mono text-xs uppercase text-(--muted) hover:text-(--accent) transition-colors" href="../en/index.html">en</a><a class="font-mono text-xs uppercase text-(--accent) transition-colors" href="../pt/index.html">pt</a></span>
+  </nav>
+</header>
+
+<!-- ======================= hero ======================= -->
+<section class="relative overflow-hidden">
+  <div class="mx-auto max-w-6xl px-5 pt-20 pb-16 lg:pt-28 lg:pb-24">
+    <p class="rise-1 font-mono text-[13px] tracking-[0.18em] uppercase text-(--accent)">sequencial &nbsp;·&nbsp; reposição mínima de probabilidade &nbsp;·&nbsp; Chromy (1979)</p>
+    <h1 class="rise-2 font-display mt-4 max-w-3xl text-5xl font-semibold leading-[1.04] tracking-tight sm:text-6xl lg:text-7xl">
+      Cada unidade a menos de<br><span class="text-(--accent)">um da sua expectativa</span>.
+    </h1>
+    <p class="rise-3 mt-6 max-w-2xl text-lg leading-relaxed text-(--muted)">
+      O método de Chromy seleciona as unidades uma a uma ao longo de uma lista
+      ordenada, cada qual com probabilidade proporcional ao seu tamanho, de modo
+      que uma unidade esperada 0,3 vezes é selecionada 0 ou 1 vez, uma esperada
+      2,4 vezes é selecionada 2 ou 3 — nunca mais longe — e o tamanho da amostra
+      é sempre exato. É assim que muitos grandes levantamentos sorteiam as suas
+      amostras, e é assim que funciona o <code class="font-mono text-[0.9em]">PROC
+      SURVEYSELECT METHOD=PPS_SEQ</code>. Até agora o método vivia dentro de
+      software proprietário e de um módulo de Stata.
+      <strong class="text-(--text) font-semibold">chromy</strong> é o método em
+      código aberto: um motor em Rust, vinculado a R e a Python.
+    </p>
+
+    <div class="rise-4 mt-9 flex flex-wrap items-center gap-3">
+      <a href="#instalar" class="rounded-md border border-(--rule) bg-(--surface) px-4 py-2.5 font-mono text-sm hover:border-(--accent) transition-colors">instalar</a>
+      <a href="https://castlaboratory.github.io/chromy/" class="rounded-md border border-transparent px-4 py-2.5 font-mono text-sm text-(--muted) hover:text-(--accent) transition-colors">↗ o site do pacote R</a>
+    </div>
+
+    <!-- a coisa em si -->
+    <div class="rise-5 mt-12 overflow-hidden rounded-lg border border-(--rule) bg-(--color-term) shadow-[0_18px_50px_-24px_rgba(27,42,65,0.5)]">
+      <div class="border-b border-white/10 px-4 py-2 font-mono text-xs text-(--color-termtext)/50">um desenho completo, em R</div>
+      <pre class="overflow-x-auto px-5 py-4 font-mono text-[13px] leading-relaxed text-(--color-termtext)"><code>s &lt;- chromy_sample(frame, n = 40, size = "pupils",
+                   order_by = c("region", "chromy_size"), seed = 123)
+
+sum(s$sample$hits)                      <span class="text-sky-300">40</span>   <span class="text-(--color-termtext)/60"># sempre: exato, não esperado</span>
+sum(s$expected_hits)                    <span class="text-sky-300">40</span>
+estimate_total(s, "outcome")            <span class="text-sky-300">total 37623, EP 5010 (CV 13,3%)</span></code></pre>
+    </div>
+    <p class="mt-3 font-mono text-xs text-(--muted)">A mesma semente dá a mesma amostra, até o último sorteio — a aleatoriedade vem do gerador do próprio R, nunca de dentro do motor.</p>
+  </div>
+</section>
+
+<!-- ======================= o método ======================= -->
+<section id="metodo" class="rule-y bg-(--surface)/60">
+  <div class="mx-auto max-w-6xl px-5 py-20">
+    <p class="font-mono text-[13px] tracking-[0.15em] uppercase text-(--accent)">o método</p>
+    <h2 class="font-display mt-3 max-w-3xl text-4xl font-semibold tracking-tight">Uma caminhada pela lista, um sorteio condicional por unidade.</h2>
+    <p class="mt-5 max-w-3xl text-lg leading-relaxed text-(--muted)">
+      Os <em>hits</em> esperados se acumulam ao longo da lista ordenada. Cada vez
+      que a soma corrente cruza um inteiro, uma seleção é liberada; um único
+      uniforme por unidade decide, condicionalmente à caminhada até ali, se a
+      seleção pendente cai aqui ou segue adiante. Os condicionais são construídos
+      para que os hits de cada unidade saiam exatamente com a probabilidade que a
+      sua expectativa exige — uma implementação sequencial do desenho, não uma
+      aproximação dele.
+    </p>
+
+    <figure class="mt-10">
+      <img src="../walk.svg" alt="Seis unidades cujos hits esperados somam três; o caminho acumulado cruza três níveis inteiros, e cada cruzamento libera uma seleção." class="w-full rounded-lg border border-(--rule) bg-(--surface)">
+    </figure>
+
+    <div class="mt-10 grid gap-4 sm:grid-cols-3">
+      <div class="rounded-lg border border-(--rule) bg-(--surface) p-5">
+        <p class="font-mono text-sm text-(--accent)">tamanho exato</p>
+        <p class="mt-2 text-[15px] leading-relaxed text-(--muted)">Os hits somam n em toda realização. Não em média: sempre.</p>
+      </div>
+      <div class="rounded-lg border border-(--rule) bg-(--surface) p-5">
+        <p class="font-mono text-sm text-(--accent)">reposição mínima</p>
+        <p class="mt-2 text-[15px] leading-relaxed text-(--muted)">Os hits são o piso ou o teto da expectativa — uma unidade pode ser selecionada mais de uma vez, mas nunca se afasta do que o desenho lhe prometeu.</p>
+      </div>
+      <div class="rounded-lg border border-(--rule) bg-(--surface) p-5">
+        <p class="font-mono text-sm text-(--accent)">estratificação implícita</p>
+        <p class="mt-2 text-[15px] leading-relaxed text-(--muted)">Unidades vizinhas na lista são selecionadas afastadas, e a amostra se espalha sobre o que quer que as chaves de ordenação codifiquem.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= as ferramentas ======================= -->
+<section id="ferramentas">
+  <div class="mx-auto max-w-6xl px-5 py-20">
+    <p class="font-mono text-[13px] tracking-[0.15em] uppercase text-(--accent)">as ferramentas</p>
+    <h2 class="font-display mt-3 max-w-3xl text-4xl font-semibold tracking-tight">O aparato com que o método é usado na prática.</h2>
+    <p class="mt-5 max-w-3xl text-lg leading-relaxed text-(--muted)">
+      Um procedimento de seleção sozinho é metade de um desenho. Em volta dele,
+      as peças que os levantamentos que dependem do método de Chromy de fato
+      usam — cada uma é uma função do motor, cada uma testada contra a mesma
+      referência.
+    </p>
+
+    <div class="mt-10 grid gap-4 sm:grid-cols-2">
+      <div class="rounded-lg border border-(--rule) bg-(--surface) p-5">
+        <p class="font-mono text-sm text-(--accent)">ordenação serpentina</p>
+        <p class="mt-2 text-[15px] leading-relaxed text-(--muted)">A ordenação hierárquica que inverte a direção em cada fronteira de grupo, de modo que a lista serpenteia pelo cadastro e as unidades vizinhas são sempre parecidas. Chaves categóricas ordenam por bytes, nunca pelo locale: o mesmo cadastro ordena igual em qualquer máquina.</p>
+      </div>
+      <div class="rounded-lg border border-(--rule) bg-(--surface) p-5">
+        <p class="font-mono text-sm text-(--accent)">medida de tamanho maximal</p>
+        <p class="mt-2 text-[15px] leading-relaxed text-(--muted)">Para levantamentos que precisam estimar vários totais com uma só amostra: o tamanho de cada unidade é a maior das suas participações escalonadas entre as variáveis auxiliares (Folsom, Potter e Williams, 1987), e toda variável recebe ao menos a cobertura que pretendia.</p>
+      </div>
+      <div class="rounded-lg border border-(--rule) bg-(--surface) p-5">
+        <p class="font-mono text-sm text-(--accent)">alocação de CVs iguais</p>
+        <p class="mt-2 text-[15px] leading-relaxed text-(--muted)">Os fatores que decidem quanta amostra cada variável comanda, buscados até que o total de toda variável seja antecipado com o mesmo coeficiente de variação — nenhuma estimativa sacrificada em silêncio a outra.</p>
+      </div>
+      <div class="rounded-lg border border-(--rule) bg-(--surface) p-5">
+        <p class="font-mono text-sm text-(--accent)">estimação por multiplicidade</p>
+        <p class="mt-2 text-[15px] leading-relaxed text-(--muted)">O estimador que corresponde ao desenho — valores divididos pelos hits esperados efetivos, ponderados pelos hits recebidos — com a variância de diferenças sucessivas lida na ordem da lista, onde a serpentina deixou vizinhos genuinamente parecidos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= linguagens ======================= -->
+<section id="linguagens" class="rule-y bg-(--surface)/60">
+  <div class="mx-auto max-w-6xl px-5 py-20">
+    <p class="font-mono text-[13px] tracking-[0.15em] uppercase text-(--accent)">um motor, três linguagens</p>
+    <h2 class="font-display mt-3 max-w-3xl text-4xl font-semibold tracking-tight">O motor recebe a aleatoriedade como argumento.</h2>
+    <p class="mt-5 max-w-3xl text-lg leading-relaxed text-(--muted)">
+      <code class="font-mono text-[0.9em]">chromy-core</code> não tem dependências
+      nem gerador: os uniformes chegam como argumentos, e uma seleção é uma função
+      pura das suas entradas. O R os sorteia com o gerador do próprio R — e é por
+      isso que <code class="font-mono text-[0.9em]">set.seed()</code> reproduz o
+      protótipo original sorteio a sorteio — e o Python os sorteia de uma semente
+      documentada. Três linguagens, uma aritmética, uma referência.
+    </p>
+
+    <figure class="mt-10">
+      <img src="../architecture.svg" alt="Um cadastro com tamanhos e os uniformes do chamador entram no chromy-core, usado de Rust, do R como o pacote chromy e do Python como pychromy; testes-ouro fixam os três a uma referência." class="w-full rounded-lg border border-(--rule) bg-(--surface)">
+    </figure>
+
+    <div class="mt-10 grid gap-4 sm:grid-cols-3">
+      <div class="rounded-lg border border-(--rule) bg-(--surface) p-5">
+        <p class="font-mono text-sm text-(--accent)">R · chromy</p>
+        <p class="mt-2 text-[15px] leading-relaxed text-(--muted)">Data frames entram, tibbles saem; o desenho inteiro numa chamada; quatro vinhetas, da caminhada à validação.</p>
+        <p class="mt-3 text-sm"><a class="font-mono underline decoration-(--rule) underline-offset-4 hover:decoration-(--accent)" href="https://castlaboratory.github.io/chromy/">site do pacote &#8599;</a></p>
+      </div>
+      <div class="rounded-lg border border-(--rule) bg-(--surface) p-5">
+        <p class="font-mono text-sm text-(--accent)">Python · pychromy</p>
+        <p class="mt-2 text-[15px] leading-relaxed text-(--muted)">Listas de colunas entram, dicts de listas paralelas saem — nada para instalar além da wheel; pandas opcional por construção.</p>
+        <p class="mt-3 text-sm"><a class="font-mono underline decoration-(--rule) underline-offset-4 hover:decoration-(--accent)" href="https://castlaboratory.github.io/pychromy/">site do pacote &#8599;</a></p>
+      </div>
+      <div class="rounded-lg border border-(--rule) bg-(--surface) p-5">
+        <p class="font-mono text-sm text-(--accent)">Rust · chromy-core</p>
+        <p class="mt-2 text-[15px] leading-relaxed text-(--muted)">O próprio motor, para um sistema de produção que sorteia as próprias amostras; slices entram, structs saem.</p>
+        <p class="mt-3 text-sm"><a class="font-mono underline decoration-(--rule) underline-offset-4 hover:decoration-(--accent)" href="https://docs.rs/chromy-core">docs.rs &#8599;</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= fidelidade ======================= -->
+<section>
+  <div class="mx-auto max-w-6xl px-5 py-20">
+    <div class="grid gap-10 lg:grid-cols-2">
+      <div>
+        <p class="font-mono text-[13px] tracking-[0.15em] uppercase text-(--accent)">fidelidade</p>
+        <h2 class="font-display mt-3 text-4xl font-semibold tracking-tight">O ponto flutuante faz parte do desenho.</h2>
+        <p class="mt-5 text-lg leading-relaxed text-(--muted)">
+          Hits esperados que deveriam somar um inteiro raramente somam em doubles,
+          e um resto que cai em 1&nbsp;−&nbsp;10<sup>−16</sup> é ou não é um
+          cruzamento — a resposta muda quem pode ser selecionado. O motor mede o
+          desvio com soma compensada, recusa-o além de 10<sup>−8</sup> em vez de
+          reescalar as probabilidades do chamador, atribui o que resta a uma única
+          unidade e relata cada ajuste que fez. Os hits esperados
+          <em>efetivos</em> que devolve são os denominadores pelos quais o
+          estimador divide.
+        </p>
+        <p class="mt-4 text-lg leading-relaxed text-(--muted)">
+          O ecossistema inteiro está fixado a uma única implementação de
+          referência por fixtures-ouro: saídas inteiras exatas, ponto flutuante na
+          precisão da máquina — e o pacote R vai além, reproduzindo a referência
+          semente a semente.
+        </p>
+      </div>
+      <div class="self-start overflow-hidden rounded-lg border border-(--rule) bg-(--color-term)">
+        <div class="border-b border-white/10 px-4 py-2 font-mono text-xs text-(--color-termtext)/50">a contabilidade, relatada com cada amostra</div>
+        <pre class="overflow-x-auto px-5 py-4 font-mono text-[13px] leading-relaxed text-(--color-termtext)"><code>s$accounting
+<span class="text-(--color-termtext)/60">$eps_sum</span>              <span class="text-sky-300">-8.43e-15</span>   <span class="text-(--color-termtext)/60"># o desvio medido</span>
+<span class="text-(--color-termtext)/60">$corrected_unit</span>       <span class="text-sky-300">512</span>         <span class="text-(--color-termtext)/60"># quem o absorveu</span>
+<span class="text-(--color-termtext)/60">$adjusted_crossings</span>   <span class="text-sky-300">0</span>
+<span class="text-(--color-termtext)/60">$max_adjustment</span>       <span class="text-sky-300">8.43e-15</span>
+
+<span class="text-(--color-termtext)/60"># e uma recusa é uma recusa:</span>
+<span class="text-red-400">Error: the expected hits sum 3.2e-2 away from an
+integer, beyond the 1e-8 tolerance; they do not
+define a sample size</span></code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= instalar ======================= -->
+<section id="instalar" class="rule-y bg-(--surface)/60">
+  <div class="mx-auto max-w-6xl px-5 py-20">
+    <p class="font-mono text-[13px] tracking-[0.15em] uppercase text-(--accent)">instalar</p>
+    <h2 class="font-display mt-3 text-4xl font-semibold tracking-tight">Três portas para o mesmo motor.</h2>
+
+    <div class="mt-8 grid gap-4 lg:grid-cols-3">
+      <div class="overflow-hidden rounded-lg border border-(--rule) bg-(--color-term)">
+        <div class="border-b border-white/10 px-4 py-2 font-mono text-xs text-(--color-termtext)/50">R</div>
+        <pre class="px-5 py-4 font-mono text-[13px] leading-relaxed text-(--color-termtext)"><code>pak::pak(
+  "castlaboratory/chromy")</code></pre>
+      </div>
+      <div class="overflow-hidden rounded-lg border border-(--rule) bg-(--color-term)">
+        <div class="border-b border-white/10 px-4 py-2 font-mono text-xs text-(--color-termtext)/50">Python</div>
+        <pre class="px-5 py-4 font-mono text-[13px] leading-relaxed text-(--color-termtext)"><code>pip install pychromy</code></pre>
+      </div>
+      <div class="overflow-hidden rounded-lg border border-(--rule) bg-(--color-term)">
+        <div class="border-b border-white/10 px-4 py-2 font-mono text-xs text-(--color-termtext)/50">Cargo.toml</div>
+        <pre class="px-5 py-4 font-mono text-[13px] leading-relaxed text-(--color-termtext)"><code>[dependencies]
+chromy-core = "0.1"</code></pre>
+      </div>
+    </div>
+    <p class="mt-4 max-w-3xl text-[15px] leading-relaxed text-(--muted)">
+      O pacote R compila do código-fonte com uma toolchain Rust (≥ 1.77) até os
+      binários do CRAN estarem no ar; o crate em si não tem dependência alguma.
+    </p>
+  </div>
+</section>
+
+<!-- ======================= rodapé ======================= -->
+<footer class="border-t border-(--rule)">
+  <div class="mx-auto max-w-6xl px-5 py-12">
+    <div class="grid gap-8 sm:grid-cols-3">
+      <div>
+        <p class="font-display text-lg font-semibold">chromy</p>
+        <p class="mt-2 text-[15px] leading-relaxed text-(--muted)">A amostragem sequencial de Chromy com reposição mínima de probabilidade. GPL-3.0-or-later. Um projeto do <a class="underline decoration-(--rule) underline-offset-4 hover:decoration-(--accent)" href="https://castlab.org">CAST Lab</a>, UFPE.</p>
+      </div>
+      <div>
+        <p class="font-mono text-xs uppercase tracking-[0.15em] text-(--muted)">referências</p>
+        <p class="mt-2 text-[15px] leading-relaxed text-(--muted)">
+          Chromy (1979), <em>Proc. ASA SRMS</em>, 401–406 ·
+          Chauvet e Le Gleut (2021), <em>Survey Methodology</em> 47(2) ·
+          Folsom, Potter e Williams (1987), <em>Proc. ASA SRMS</em>, 792–796.
+        </p>
+      </div>
+      <div>
+        <p class="font-mono text-xs uppercase tracking-[0.15em] text-(--muted)">links</p>
+        <p class="mt-2 flex flex-col gap-1.5 font-mono text-sm text-(--muted)">
+          <a class="hover:text-(--accent) transition-colors" href="https://github.com/castlaboratory/chromy-core">github · chromy-core</a>
+          <a class="hover:text-(--accent) transition-colors" href="https://github.com/castlaboratory/chromy">github · chromy (R)</a>
+          <a class="hover:text-(--accent) transition-colors" href="https://github.com/castlaboratory/pychromy">github · pychromy</a>
+          <a class="hover:text-(--accent) transition-colors" href="https://crates.io/crates/chromy-core">crates.io</a>
+          <a class="hover:text-(--accent) transition-colors" href="https://docs.rs/chromy-core">docs.rs</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
