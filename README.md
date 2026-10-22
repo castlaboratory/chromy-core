@@ -3,6 +3,7 @@
 [![crates.io](https://img.shields.io/crates/v/chromy-core.svg)](https://crates.io/crates/chromy-core)
 [![docs.rs](https://img.shields.io/docsrs/chromy-core)](https://docs.rs/chromy-core)
 [![license: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](LICENSE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23576471.svg)](https://doi.org/10.5281/zenodo.23576471)
 
 Chromy's method of sequential random sampling, in the open. The procedure
 selects units one at a time down an ordered list, each with probability
