@@ -23,7 +23,11 @@
 //! - [`select`] / [`select_from`]: the full procedure with a random head,
 //!   as SAS runs it;
 //! - [`multiplicity_estimate`]: the estimator that matches the design, with
-//!   the successive-difference variance.
+//!   the successive-difference variance;
+//! - [`joint_inclusion`]: exact second-order inclusion probabilities for
+//!   the without-replacement design, by the closed forms of Chauvet and
+//!   Le Gleut's Theorem 3 and their randomized-head mixture — the
+//!   Sen–Yates–Grundy variance becomes exact, not approximated.
 //!
 //! The crate has no dependencies and takes its randomness as arguments —
 //! a slice of uniforms — so a caller in R, Python or Rust reproduces a
@@ -39,6 +43,7 @@
 mod allocate;
 mod error;
 mod estimate;
+mod joint;
 mod order;
 mod pmr;
 mod select;
@@ -47,6 +52,7 @@ mod size;
 pub use allocate::{eqcv, expected_hits, EqcvAllocation, EqcvOptions};
 pub use error::Error;
 pub use estimate::{multiplicity_estimate, Estimate};
+pub use joint::joint_inclusion;
 pub use order::{nested, serpentine, Key};
 pub use pmr::{pmr, Selection};
 pub use select::{
