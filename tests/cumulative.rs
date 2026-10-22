@@ -4,10 +4,10 @@
 //! reference implementation does. The same procedure can instead be read
 //! off the *cumulative* expected hits: split each partial sum into integer
 //! and fractional parts and express Chromy's transition probabilities in
-//! those terms. The two formulations were written independently (this one
-//! follows a separate R implementation of the method) and must give the
-//! same hits from the same uniforms — a disagreement is a bug in one of
-//! them, whichever it is.
+//! those terms. The two formulations were written independently — this one
+//! follows Clara Ribeiro de Santana's R implementation of the method — and
+//! must give the same hits from the same uniforms; a disagreement is a bug
+//! in one of them, whichever it is.
 
 use chromy_core::{expected_hits, pmr};
 
