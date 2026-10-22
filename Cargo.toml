@@ -1,0 +1,36 @@
+[package]
+name = "chromy-core"
+version = "0.1.0"
+description = "Chromy's sequential sampling with probability minimum replacement: serpentine sorting, multivariate size measures, expected hits, equal-CV allocation, and the multiplicity estimator"
+edition = "2021"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/castlaboratory/chromy-core"
+homepage = "https://castlaboratory.github.io/chromy-core/"
+documentation = "https://docs.rs/chromy-core"
+authors = [
+    "André Leite <leite@castlab.org>",
+    "Raydonal Ospina <raydonal@castlab.org>",
+    "Cristiano Ferraz <cferraz@castlab.org>",
+    "David Eloi dos Santos Bitencourt <profdavidsb@gmail.com>",
+    "Clara Ribeiro de Santana <clara.rsantana@ufpe.br>",
+]
+keywords = ["sampling", "survey", "pps", "statistics", "chromy"]
+categories = ["science", "mathematics"]
+readme = "README.md"
+# f64::round_ties_even, which this crate needs to follow R and IEC 60559.
+rust-version = "1.77"
+# Not part of the published crate: the site is a site.
+exclude = ["docs/"]
+
+[dependencies]
+# None. The algorithms are arithmetic over slices; every dependency a
+# downstream binding (R, Python) would have to vendor and audit.
+
+[dev-dependencies]
+# Only to read the golden fixtures generated from the reference R
+# implementation; the crate itself never sees JSON.
+serde_json = "1"
+
+[profile.release]
+lto = true
+codegen-units = 1
