@@ -27,7 +27,7 @@
 <header class="border-b border-(--rule) bg-(--bg)/80 backdrop-blur-sm sticky top-0 z-40">
   <nav class="mx-auto flex max-w-6xl items-baseline gap-6 px-5 py-3.5">
     <a href="#" class="font-display text-xl font-bold tracking-tight">chromy</a>
-    <span class="font-mono text-xs text-(--muted) hidden sm:inline">v0.1</span>
+    <span class="font-mono text-xs text-(--muted) hidden sm:inline">v0.2</span>
     <span class="flex-1"></span>
     <a class="font-mono text-sm text-(--muted) hover:text-(--accent) transition-colors" href="#metodo">método</a>
     <a class="font-mono text-sm text-(--muted) hover:text-(--accent) transition-colors" href="#ferramentas">ferramentas</a>
@@ -141,7 +141,7 @@ estimate_total(s, "outcome")            <span class="text-sky-300">total 37623, 
       </div>
       <div class="rounded-lg border border-(--rule) bg-(--surface) p-5">
         <p class="font-mono text-sm text-(--accent)">estimação por multiplicidade</p>
-        <p class="mt-2 text-[15px] leading-relaxed text-(--muted)">O estimador que corresponde ao desenho — valores divididos pelos hits esperados efetivos, ponderados pelos hits recebidos — com a variância de diferenças sucessivas lida na ordem da lista, onde a serpentina deixou vizinhos genuinamente parecidos.</p>
+        <p class="mt-2 text-[15px] leading-relaxed text-(--muted)">O estimador que corresponde ao desenho — valores divididos pelos hits esperados efetivos, ponderados pelos hits recebidos — com a variância de diferenças sucessivas lida na ordem da lista — e, para o desenho sem reposição, probabilidades conjuntas de inclusão exatas (Chauvet e Le Gleut, 2021), que tornam exata a variância de Sen–Yates–Grundy.</p>
       </div>
     </div>
   </div>
