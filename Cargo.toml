@@ -1,6 +1,6 @@
 [package]
 name = "chromy-core"
-version = "0.1.0"
+version = "0.1.1"
 description = "Chromy's sequential sampling with probability minimum replacement: serpentine sorting, multivariate size measures, expected hits, equal-CV allocation, and the multiplicity estimator"
 edition = "2021"
 license = "GPL-3.0-or-later"
