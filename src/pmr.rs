@@ -238,6 +238,19 @@ pub fn pmr(lambda: &[f64], uniforms: &[f64], priority: &[usize]) -> Result<Selec
             "realised hits sum to {total}, expected {n}"
         )));
     }
+    // Minimum replacement itself, checked on every call: each unit's hits
+    // are the floor or the ceiling of its effective expected hits.
+    for (i, &h) in hits.iter().enumerate() {
+        let lo = effective_lambda[i].floor() as i64;
+        let hi = effective_lambda[i].ceil() as i64;
+        if h < lo || h > hi {
+            return Err(Error::Internal(format!(
+                "unit {i} realised {h} hits against expected {}; minimum \
+                 replacement was violated",
+                effective_lambda[i]
+            )));
+        }
+    }
     let hits: Vec<u64> = hits.iter().map(|&h| h as u64).collect();
 
     let max_adjustment = lambda
